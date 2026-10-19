@@ -1,26 +1,231 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-canvas: #07080a;
+  --color-surface: #0c0e12;
+  --color-surface-2: #11141a;
+  --color-line: #1c212a;
+  --color-line-strong: #2a313d;
+  --color-ink: #e8ebf1;
+  --color-ink-muted: #9aa3b1;
+  --color-ink-faint: #737d8c;
+  --color-amber: #f6b73c;
+  --color-cyan: #5cc8ff;
+  --color-blue: #7c9aff;
+  --color-green: #63e6a5;
+  --color-red: #ff6b6b;
+
+  --font-sans: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: dark;
+  }
+
+  html,
+  body {
+    min-height: 100%;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01" 1;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgba(246, 183, 60, 0.28);
+    color: #fff8e6;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-amber);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #232933;
+    border: 2px solid var(--color-canvas);
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #303846;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .panel {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: 14px;
+  }
+
+  .radar-grid {
+    background-image: radial-gradient(circle, rgba(232, 235, 241, 0.09) 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-position: center;
+    mask-image: radial-gradient(ellipse at center, #000 30%, transparent 78%);
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #232933 transparent;
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes row-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes core-sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ring-breathe {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes shockwave {
+  0% {
+    transform: scale(0.97);
+    opacity: 0.8;
+  }
+  75%,
+  100% {
+    transform: scale(1.16);
+    opacity: 0;
+  }
+}
+
+@keyframes bar-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(246, 183, 60, 0);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(246, 183, 60, 0.65);
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2.2s ease-in-out infinite;
+}
+
+.animate-row-in {
+  animation: row-in 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animate-core-sweep {
+  animation: core-sweep 24s linear infinite;
+  transform-origin: center;
+}
+
+.animate-ring-breathe {
+  animation: ring-breathe 3.4s ease-in-out infinite;
+}
+
+.animate-shockwave {
+  animation: shockwave 1.7s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+}
+
+.animate-bar-pulse {
+  animation: bar-pulse 1.6s ease-in-out infinite;
+}
+
+/* End of motion utilities. */
+
+.skeleton {
+  background: linear-gradient(90deg, #12161d 25%, #1a202a 50%, #12161d 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.react-flow__node {
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.react-flow__handle {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.react-flow__attribution {
+  display: none;
+}
+
+.react-flow__pane {
+  cursor: grab;
+}
+
+.react-flow__pane:active {
+  cursor: grabbing;
+}
+
+.topology-stage:fullscreen {
+  width: 100vw;
+  height: 100dvh;
+  border-radius: 0;
+  background-color: #080a0d;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

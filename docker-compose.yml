@@ -1,0 +1,15 @@
+services:
+  pulse:
+    build: .
+    container_name: 9router-pulse
+    ports:
+      - "3210:3210"
+    environment:
+      # Alamat 9Router dari dalam kontainer.
+      # host.docker.internal = mesin host (Docker Desktop / Docker 20.10+).
+      NINE_ROUTER_URL: ${NINE_ROUTER_URL:-http://host.docker.internal:20128}
+      NINE_ROUTER_MOCK: ${NINE_ROUTER_MOCK:-0}
+      NINE_ROUTER_COOKIE_SECURE: ${NINE_ROUTER_COOKIE_SECURE:-false}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
